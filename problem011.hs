@@ -13,10 +13,15 @@ main = do
   putStrLn ("maxRows: " ++ show maxRows)
 
 -- NW - SE => [ l !! (20 * x + x) | x <- [0..19]]
--- [ l !! (20 * x + x+1) | x <- [0..18]]
--- [ [ l !! (20 * (y+x) + x) | x <- [0..19-y]] | y <- [16,15..0] ]
+-- [ [ l !! ((y+x) * 20 + x) | x <- [0..19-y]] | y <- [16,15..0] ]
+-- [ [ l !! ((y+x) + 20 * x) | x <- [0..19-y]] | y <- [1..16] ]
 --
 -- NE - SW => [ l !! (19 * x) | x <- [1..20]]
+--
+getNWSE :: [Int] -> [[Int]]
+getNWSE xs = [ 
+  [ xs !! ((abs y + x) * 20 + x) | x <- [0..19 - abs y], let i = getIndex x y ] | y <- [16,15..(-16)] ]
+    where getIndex x y = if (y < 0) then ((abs y + x) + 20 * x) else ((abs y + x) * 20 + x)
  
 getColums :: [[Int]] -> [[Int]]
 getColums xs = transpose xs
