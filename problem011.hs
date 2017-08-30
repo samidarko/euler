@@ -13,6 +13,9 @@ main = do
   putStrLn ("maxRows: " ++ show maxRows)
 
 -- NW - SE => [ l !! (20 * x + x) | x <- [0..19]]
+-- [ l !! (20 * x + x+1) | x <- [0..18]]
+-- [ [ l !! (20 * (y+x) + x) | x <- [0..19-y]] | y <- [16,15..0] ]
+--
 -- NE - SW => [ l !! (19 * x) | x <- [1..20]]
  
 getColums :: [[Int]] -> [[Int]]
