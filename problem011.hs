@@ -7,17 +7,23 @@ main = do
   let l = [ read x :: Int | x <- foldl (++) [] $ map (splitOn " ") (lines content)]
   let rows = getRows l
   let cols = getColums rows
+  let nesw = getNESW l
+  let nwse = getNWSE l
   let maxRows = maximum $ map (maxAdjacent 0) rows
   let maxCols = maximum $ map (maxAdjacent 0) cols
+  let maxNESW = maximum $ map (maxAdjacent 0) nesw
+  let maxNWSE = maximum $ map (maxAdjacent 0) nwse
   putStrLn ("maxCols: " ++ show maxCols)
   putStrLn ("maxRows: " ++ show maxRows)
+  putStrLn ("maxNESW: " ++ show maxNESW)
+  putStrLn ("maxNWSE: " ++ show maxNWSE)
 
--- NW - SE => [ l !! (20 * x + x) | x <- [0..19]]
--- [ [ l !! ((y+x) * 20 + x) | x <- [0..19-y]] | y <- [16,15..0] ]
--- [ [ l !! ((y+x) + 20 * x) | x <- [0..19-y]] | y <- [1..16] ]
---
--- NE - SW => [ l !! (19 * x) | x <- [1..20]]
---
+getNESW :: [Int] -> [[Int]]
+getNESW xs = [
+  [ xs !! i |  x <- [start y..abs y], let i = getIndex x y ] | y <- [3..19] ++ [(-19)..(-4)] ]
+    where getIndex a b = if (b < 0) then (20 * (20 + b) + (19 * a)) else (b + 19 * a)
+          start x = if (x < 0) then 1 else 0
+
 getNWSE :: [Int] -> [[Int]]
 getNWSE xs = [
   [ xs !! i | x <- [0..19 - abs y], let i = getIndex x y ] | y <- [16,15..(-16)] ]
