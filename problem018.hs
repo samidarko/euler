@@ -12,3 +12,6 @@ main = do
 -- dfs tree depth pos
 --   | depth > 0 =
 
+-- test (xs:ys:t) = test ([ x+y | x <- xs, y <- ys ] : t)
+-- test (x:[]) = x
+-- test _ = []
