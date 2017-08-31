@@ -19,10 +19,10 @@ main = do
 -- NE - SW => [ l !! (19 * x) | x <- [1..20]]
 --
 getNWSE :: [Int] -> [[Int]]
-getNWSE xs = [ 
-  [ xs !! ((abs y + x) * 20 + x) | x <- [0..19 - abs y], let i = getIndex x y ] | y <- [16,15..(-16)] ]
-    where getIndex x y = if (y < 0) then ((abs y + x) + 20 * x) else ((abs y + x) * 20 + x)
- 
+getNWSE xs = [
+  [ xs !! i | x <- [0..19 - abs y], let i = getIndex x y ] | y <- [16,15..(-16)] ]
+    where getIndex a b = if (b < 0) then ((abs b + a) + 20 * a) else ((abs b + a) * 20 + a)
+
 getColums :: [[Int]] -> [[Int]]
 getColums xs = transpose xs
 
