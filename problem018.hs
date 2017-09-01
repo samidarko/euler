@@ -1,17 +1,15 @@
 import Data.List.Split (splitOn)
 
-data Tree a = Empty | Node a (Tree a) (Tree a) deriving (Show)
-
 main :: IO ()
 main = do
   content <- readFile "problem018.txt"
   let l = [ [ read x :: Int | x <- xs] | xs <- map (splitOn " ") (lines content) ]
-  putStrLn $ show l
+  let paths = sumAdj ((head . head) l) 0 (tail l)
+  putStrLn $ show $ maximum $ paths
 
--- dfs :: [[Int]] -> Int -> Int -> Int
--- dfs tree depth pos
---   | depth > 0 =
+sumAdj :: Int -> Int -> [[Int]] -> [Int]
+sumAdj val pos (x:xs) = sumAdj a pos xs ++ sumAdj b (pos + 1) xs
+  where a = val + x !! pos
+        b = val + x !! (pos + 1)
+sumAdj val _ [] =  [val]
 
--- test (xs:ys:t) = test ([ x+y | x <- xs, y <- ys ] : t)
--- test (x:[]) = x
--- test _ = []
