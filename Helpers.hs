@@ -2,6 +2,7 @@ module Helpers (
     stringToIntList
                , fibs
                , primesTo
+               , takeEvery
                ) where
 
 import Data.Char (digitToInt)
@@ -26,4 +27,9 @@ minus (x:xs) (y:ys) = case (compare x y) of
            EQ ->     minus  xs     ys 
            GT ->     minus (x:xs)  ys
 minus  xs     _     = xs
+
+
+takeEvery n xs = case drop (n-1) xs of
+              (y:ys) -> y : takeEvery n ys
+              [] -> []
 
