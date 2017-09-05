@@ -3,6 +3,7 @@ module Helpers (
                , fibs
                , primesTo
                , takeEvery
+               , factors
                ) where
 
 import Data.Char (digitToInt)
@@ -33,3 +34,4 @@ takeEvery n xs = case drop (n-1) xs of
               (y:ys) -> y : takeEvery n ys
               [] -> []
 
+factors y = [ x | x <- [1..y], y `mod` x == 0 ]
