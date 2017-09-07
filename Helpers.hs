@@ -34,4 +34,4 @@ takeEvery n xs = case drop (n-1) xs of
               (y:ys) -> y : takeEvery n ys
               [] -> []
 
-factors y = [ x | x <- [1..y], y `mod` x == 0 ]
+factors y = [ x | x <- [1..y-1], y `mod` x == 0 ]

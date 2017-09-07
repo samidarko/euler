@@ -7,7 +7,7 @@ amicableNumbers = sum $ M.keys $ M.filterWithKey testFilter sfm
 
 sumFactors :: Integral t => t -> t
 sumFactors 0 = 0
-sumFactors x = sum $ init $ factors x
+sumFactors x = sum $ factors x
 
 -- sum factors map
 sfm = foldl (\acc v -> M.insert v (sumFactors v) acc) M.empty [0..9999]
