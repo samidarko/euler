@@ -1,21 +1,17 @@
 import Data.Char (intToDigit)
+import Helpers (stringToIntList)
 
--- digitFifthPower :: Int
--- digitFifthPower = sum $ [ sp | 
-digitFifthPower = [ (sp, xs) | 
-    a <- l, 
-    b <- l, 
-    c <- l, 
-    d <- l, 
-    e <- l, 
-    let xs = [a, b, c, d, e],
-    let sp = sumPower xs,
+digitFifthPower :: Integer
+digitFifthPower = sum [ sp | a <- l,
+    let xs = stringToIntList $ show a,
+    let sp = sumPower 5 xs,
     show sp == toString xs ]
-  where l = [0..9]
+  where l = [2..355000]
 
-sumPower :: [Int] -> Int
-sumPower xs = let p = length xs
-               in sum $ map (^p) xs
+sumPower :: Int -> [Integer] -> Integer
+sumPower p xs = sum $ map (^p) xs
 
-toString :: [Int] -> String
-toString xs = [ intToDigit x | x <- xs ]
+toString :: [Integer] -> String
+toString xs = [ intToDigit $ fromIntegral x | x <- xs ]
+
+-- digitFifthPower == 443839
