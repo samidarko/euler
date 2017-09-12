@@ -1,18 +1,21 @@
 import Data.Char (digitToInt)
 
-nbOfDigits = [2..7]
-indexes = [10, 100, 1000, 10000, 100000, 1000000]
-digitsBySeq = [ nbOfDigits !! i * indexes !! i * 9 * 10^i
-  | i <- [0..5] ] 
+nbOfDigits = [1..7]
+indices = [1, 10, 100, 1000, 10000, 100000, 1000000]
+digitsBySeq = 10 : [ nbOfDigits !! i * indices !! i * 9 * 10^(i-1)
+  | i <- [1..6] ] 
 
--- champernowne :: Int
--- champernowne = 1
---   where a = [180, 2700, 36000, 450000, 5400000, 63000000]
+extract i = let x = indices !! i
+             in if (x < 1000) then
+                              digitToInt $ foldl (++) [] [show x | x <- [0..100]] !! x
+                              else another i
 
-extract x = if (x < 1000) then
-                          digitToInt $ foldl (++) [] [show x | x <- [0..100]] !! x
-                          else 1
-
+another i = let s = sum $ take (i-1) digitsBySeq
+                x = indices !! i
+                offset = x - s
+                pos = offset `div` (nbOfDigits !! (i-1))
+                value = [indices !! (i-1) .. indices !! i-1] !! pos
+             in digitToInt $ show value !! (offset `mod` i)
 
 
 -- 1000000-3889
