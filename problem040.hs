@@ -1,5 +1,7 @@
 import Data.Char (digitToInt)
 
+-- takeWhile ((<3) . length)  [ show x | x <- [0..]]
+--
 -- l = foldl (++) [] [show x | x <- [1..100]]
 
 -- champernowne i (x:xs)
@@ -11,3 +13,11 @@ import Data.Char (digitToInt)
 --         isElem y = y `elem` [1, 10, 100, 1000]
 --         -- isElem y = y `elem` [1, 10, 100, 1000, 10000, 100000]
 
+-- *Main Prelude Set Data.Char Data.Char Char> (999 - 99) * 3
+-- 2700
+-- *Main Prelude Set Data.Char Data.Char Char> (9999 - 999) * 4
+-- 36000
+-- *Main Prelude Set Data.Char Data.Char Char> (99999 - 9999) * 5
+-- 450000
+-- *Main Prelude Set Data.Char Data.Char Char> (999999 - 99999) * 5
+-- 4500000
