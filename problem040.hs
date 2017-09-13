@@ -2,30 +2,28 @@ import Data.Char (digitToInt)
 import Data.List (findIndex)
 import Data.Maybe (fromJust)
 
-nod = [1..7] -- number of digits
-indices = [1, 10, 100, 1000, 10000, 100000, 1000000]
-digitsBySeq = 10 : [ nod !! i * indices !! i * 9 * 10^(i-1) | i <- [1..6] ] 
-digitsAcc = 0 : scanl1 (+) digitsBySeq
+data Item = Item { index :: Int, offset :: Int, digits :: Int, start :: Int } deriving Show
 
-extract i = let x = indices !! i
-             in if (x < 1000) then untilOneHundred x else aboveOneHundred i
+items = [
+        Item 0 0 1 1, -- need to cheat for the index due to multiplication
+        Item 10 10 2 10,
+        Item 100 10 2 10,
+        Item 1000 190 3 100,
+        Item 10000 2890 4 1000,
+        Item 100000 38890 5 10000,
+        Item 1000000 488890 6 100000
+    ]
 
-untilOneHundred x = digitToInt $ foldl (++) [] [show x | x <- [0..55]] !! x
+extract :: Item -> Int
+extract x = let s = start x
+                o = offset x
+                i = index x
+                d = digits x
+                p = (i - o) `div` d -- position
+                n = [s .. s * 10 - 1] !! p
+            in digitToInt $ show n !! (i - o - p * d)
 
-aboveOneHundred i = let x = indices !! i
-                        s = last $ takeWhile (<x) digitsAcc
-                        sIndex = fromJust $ findIndex (==s) digitsAcc -- indice index
-                        offset = x - s
-                        nbDigits = nod !! (sIndex)
-                        pos = offset `div` nbDigits
-                        sr = indices !! sIndex -- start range
-                        value = [sr .. sr * 10 - 1] !! pos
-                     in digitToInt $ show value !! (x - s - pos * nbDigits)
+champernowne :: Int
+champernowne = product $ map extract items
 
--- map extract [0 .. length indices - 1] == [1,1,5,1,9,1,1]
--- l !! 1000 == 3
--- l !! 10000 == 7
--- l !! 100000 == 2
--- l !! 1000000 == ? => by deduction == 1
-
--- champernowne = 210
+-- champernowne == 210
