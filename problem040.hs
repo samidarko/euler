@@ -1,6 +1,4 @@
 import Data.Char (digitToInt)
-import Data.List (findIndex)
-import Data.Maybe (fromJust)
 
 data Item = Item { index :: Int, offset :: Int, digits :: Int, start :: Int } deriving Show
 
@@ -27,3 +25,16 @@ champernowne :: Int
 champernowne = product $ map extract items
 
 -- champernowne == 210
+
+
+
+
+-- fn x = last $ takeWhile (x>=) offsets 
+-- map fn indexes
+-- offsets  `zip` indexes
+
+getItems = map fn $ zip3 offsets indexes [2..]
+  where offsets = scanl1 (+) (10 : [ x * 9 * 10^(x-1) | x <- [2..6]])
+        indexes = [ 10^p | p <- [1..6] ]
+        fn x = case x of (o, i, d) -> Item i (last $ takeWhile (i>=) offsets) d 100
+
