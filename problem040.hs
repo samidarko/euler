@@ -5,7 +5,7 @@ import Data.Maybe (fromJust)
 nod = [1..7] -- number of digits
 indices = [1, 10, 100, 1000, 10000, 100000, 1000000]
 digitsBySeq = 10 : [ nod !! i * indices !! i * 9 * 10^(i-1) | i <- [1..6] ] 
-digitsAcc = scanl1 (+) digitsBySeq
+digitsAcc = 0 : scanl1 (+) digitsBySeq
 
 extract i = let x = indices !! i
              in if (x < 1000) then untilOneHundred x else aboveOneHundred i
@@ -14,13 +14,13 @@ untilOneHundred x = digitToInt $ foldl (++) [] [show x | x <- [0..55]] !! x
 
 aboveOneHundred i = let x = indices !! i
                         s = last $ takeWhile (<x) digitsAcc
-                        sIndex = fromJust $ findIndex (==s) indices -- indice index
+                        sIndex = fromJust $ findIndex (==s) digitsAcc -- indice index
                         offset = x - s
-                        -- pos = offset `div` (nod !! i)
-                        pos = offset `div` (nod !! (sIndex+1))
-                        sr = indices !! (sIndex+1) -- start range
+                        nbDigits = nod !! (sIndex)
+                        pos = offset `div` nbDigits
+                        sr = indices !! sIndex -- start range
                         value = [sr .. sr * 10 - 1] !! pos
-                     in digitToInt $ show value !! ((s + offset) `mod` x)
+                     in digitToInt $ show value !! (x - s - pos * nbDigits)
 
 -- map extract [0 .. length indices - 1] == [1,1,5,1,9,1,1]
 -- l !! 1000 == 3
