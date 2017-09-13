@@ -17,8 +17,8 @@ aboveOneHundred i = let x = indices !! i
                         sIndex = fromJust $ findIndex (==s) indices -- indice index
                         offset = x - s
                         -- pos = offset `div` (nod !! i)
-                        pos = offset `div` (nod !! sIndex)
-                        sr = indices !! sIndex -- start range
+                        pos = offset `div` (nod !! (sIndex+1))
+                        sr = indices !! (sIndex+1) -- start range
                         value = [sr .. sr * 10 - 1] !! pos
                      in digitToInt $ show value !! ((s + offset) `mod` x)
 
