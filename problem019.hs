@@ -2,7 +2,7 @@ import qualified Data.Map as M
 import Data.Maybe (fromJust)
 import Data.List (findIndex)
 
-data Date = Date { weekDay :: WeekDay, day :: Int, month :: Month, year :: Int } deriving (Show)
+data Date = Date { weekDay :: WeekDay, day :: Int, month :: Month, year :: Int } deriving (Show, Eq)
 
 data WeekDay = 
     Mon | Tue | Wed | Thu | Fri | Sat | Sun deriving (Show, Eq, Ord)
@@ -32,8 +32,10 @@ instance Enum Month where
   fromEnum d = fromJust $ M.lookup d monthMap
   toEnum i = monthList !! i
 
+start = Date { weekDay = Tue, day = 1, month = Jan, year = 1900 }
+end = Date { weekDay = Sun, day = 31, month = Dec, year = 2000 }
+
 countingSundays :: Int
 countingSundays = 1
-
 -- calendar = 
 -- fn x = x : fn (succ x)
