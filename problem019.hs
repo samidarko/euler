@@ -41,9 +41,11 @@ succDate d@(Date w dd Feb y)
   | (isLeap y && dd == 29) || ((not . isLeap) y && dd == 28) = d { weekDay = succ w, day = 1, month = Mar}
   | otherwise = d { weekDay = succ w, day = succ dd }
 succDate d@(Date w dd mm y)
-  | mm `elem` [Jan, Mar, May, Jul, Aug, Oct, Dec] && dd == 31 = d { weekDay = succ w, day = 1, month = succ mm }
-  | mm `elem` [Apr, Jun, Sep, Nov] && dd == 30 =  d { weekDay = succ w, day = 1, month = succ mm }
+  | isEndOfMonth = d { weekDay = succ w, day = 1, month = succ mm }
   | otherwise = d { weekDay = succ w, day = succ dd }
+  where isEndOfMonth = (mm `elem` months31 && dd == 31) || (mm `elem` months30 && dd == 30)
+        months31 = [Jan, Mar, May, Jul, Aug, Oct, Dec]
+        months30 = [Apr, Jun, Sep, Nov]
 
 instance Enum Date where
   succ =  succDate
