@@ -1,6 +1,7 @@
 import qualified Data.Map as M
 import Data.Maybe (fromJust)
 import Data.List (findIndex)
+import Data.Time.Clock.POSIX (posixSecondsToUTCTime, utcTimeToPOSIXSeconds)
 
 data Date = Date { weekDay :: WeekDay, day :: Int, month :: Month, year :: Int } deriving (Show, Eq)
 
@@ -34,6 +35,26 @@ instance Enum Month where
 
 start = Date { weekDay = Tue, day = 1, month = Jan, year = 1900 }
 end = Date { weekDay = Sun, day = 31, month = Dec, year = 2000 }
+
+succDate d@(Date w 31 Dec y) = d { weekDay = succ w, day = 1, month = Jan, year = succ y }
+succDate d@(Date w dd Feb y)
+  | (isLeap y && dd == 29) || ((not . isLeap) y && dd == 28) = d { weekDay = succ w, day = 1, month = Mar}
+  | otherwise = d { weekDay = succ w, day = succ dd }
+succDate d@(Date w dd mm y)
+  | mm `elem` [Jan, Mar, May, Jul, Aug, Oct, Dec] && dd == 31 = d { weekDay = succ w, day = 1, month = succ mm }
+  | mm `elem` [Apr, Jun, Sep, Nov] && dd == 30 =  d { weekDay = succ w, day = 1, month = succ mm }
+  | otherwise = d { weekDay = succ w, day = succ dd }
+
+instance Enum Date where
+  succ =  succDate
+  pred d = end
+  fromEnum d = 1 -- from date to unix ts
+  toEnum i = start -- from unix ts to date
+
+isLeap :: Int -> Bool
+isLeap x
+  | x `mod` 100 == 0 = x `mod` 400 == 0 
+  | otherwise = x `mod` 4 == 0
 
 countingSundays :: Int
 countingSundays = 1
