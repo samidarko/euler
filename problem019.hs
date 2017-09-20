@@ -1,7 +1,6 @@
 import qualified Data.Map as M
 import Data.Maybe (fromJust)
 import Data.List (findIndex)
-import Data.Time.Clock.POSIX (posixSecondsToUTCTime, utcTimeToPOSIXSeconds)
 
 data Date = Date { weekDay :: WeekDay, day :: Int, month :: Month, year :: Int } deriving (Show, Eq)
 
@@ -58,6 +57,8 @@ isLeap x
   | x `mod` 100 == 0 = x `mod` 400 == 0 
   | otherwise = x `mod` 4 == 0
 
+makeInfList x = x : makeInfList (succ x)
+
 countingSundays :: Int
 countingSundays = foldl (\acc v -> case v of
     Date Sun 1 _ _ -> acc + 1
@@ -66,8 +67,6 @@ countingSundays = foldl (\acc v -> case v of
   where
     nextEnd = succ end
     l = takeWhile (/=nextEnd ) $ makeInfList start
-
-makeInfList x = x : makeInfList (succ x)
 
 -- countingSundays == 171
 
