@@ -9,9 +9,5 @@ numberLetterCounts = sum $ map (length . stripNum . unpack . fromJust) l
           l = [ EN.gb_cardinal defaultInflection x :: Maybe Text | x <- [1..limit]]
           stripNum xs = [ x | x <- xs, not (x `elem` " -") ]
 
--- numberLetterCounts == 18451
-
--- ENG.gb_cardinal defaultInflection 123 :: Maybe Text
--- Just "one hundred twenty-three" but should show 
--- "one hundred and twenty-three"
+-- numberLetterCounts == 21124
 
