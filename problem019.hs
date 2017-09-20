@@ -33,7 +33,7 @@ instance Enum Month where
   fromEnum d = fromJust $ M.lookup d monthMap
   toEnum i = monthList !! i
 
-start = Date { weekDay = Tue, day = 1, month = Jan, year = 1900 }
+start = Date { weekDay = Tue, day = 1, month = Jan, year = 1901 }
 end = Date { weekDay = Sun, day = 31, month = Dec, year = 2000 }
 
 succDate d@(Date w 31 Dec y) = d { weekDay = succ w, day = 1, month = Jan, year = succ y }
@@ -59,6 +59,15 @@ isLeap x
   | otherwise = x `mod` 4 == 0
 
 countingSundays :: Int
-countingSundays = 1
--- calendar = 
--- fn x = x : fn (succ x)
+countingSundays = foldl (\acc v -> case v of
+    Date Sun 1 _ _ -> acc + 1
+    _ -> acc
+                        ) 0 l
+  where
+    nextEnd = succ end
+    l = takeWhile (/=nextEnd ) $ makeInfList start
+
+makeInfList x = x : makeInfList (succ x)
+
+-- countingSundays == 171
+
