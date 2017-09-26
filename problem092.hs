@@ -1,4 +1,5 @@
 import Helpers (stringToIntList)
+import Control.Monad.State
 import qualified Data.Map as M
 
 next x = (sum . map (^2) . stringToIntList . show) x
@@ -14,5 +15,14 @@ chain x = case (iter x) of
 
 rightCounter e = case e of Right _ -> 1; _ -> 0
 
-prob = foldl (\acc v -> acc + rightCounter v) 0 (map chain [1..100000])
+type Counter = Int
+type SquareDigitState = (M.Map Int Int, Counter)
+
+squareDigitChains :: [Int] -> State SquareDigitState Counter
+squareDigitChains [] = do
+    (_, counter) <- get
+    return counter
+squareDigitChains (x:xs) = do
+
+-- squareDigitChains = foldl (\acc v -> acc + rightCounter v) 0 (map chain [1..100000])
 
