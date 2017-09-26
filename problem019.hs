@@ -1,7 +1,6 @@
 import qualified Data.Map as M
 import Data.Maybe (fromJust)
 import Data.List (findIndex)
-import Data.Time.Clock.POSIX (posixSecondsToUTCTime, utcTimeToPOSIXSeconds)
 
 data Date = Date { weekDay :: WeekDay, day :: Int, month :: Month, year :: Int } deriving (Show, Eq)
 
@@ -33,7 +32,7 @@ instance Enum Month where
   fromEnum d = fromJust $ M.lookup d monthMap
   toEnum i = monthList !! i
 
-start = Date { weekDay = Tue, day = 1, month = Jan, year = 1900 }
+start = Date { weekDay = Tue, day = 1, month = Jan, year = 1901 }
 end = Date { weekDay = Sun, day = 31, month = Dec, year = 2000 }
 
 succDate d@(Date w 31 Dec y) = d { weekDay = succ w, day = 1, month = Jan, year = succ y }
@@ -58,7 +57,16 @@ isLeap x
   | x `mod` 100 == 0 = x `mod` 400 == 0 
   | otherwise = x `mod` 4 == 0
 
+makeInfList x = x : makeInfList (succ x)
+
 countingSundays :: Int
-countingSundays = 1
--- calendar = 
--- fn x = x : fn (succ x)
+countingSundays = foldl (\acc v -> case v of
+    Date Sun 1 _ _ -> acc + 1
+    _ -> acc
+                        ) 0 l
+  where
+    nextEnd = succ end
+    l = takeWhile (/=nextEnd ) $ makeInfList start
+
+-- countingSundays == 171
+
