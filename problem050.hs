@@ -1,4 +1,4 @@
-import Data.Numbers.Primes (primes, isPrime)
+import Data.Numbers.Primes (primes, isPrime, primeFactors)
 
 -- consecutivePrimeSum :: [Int]
 -- consecutivePrimeSum = fn 

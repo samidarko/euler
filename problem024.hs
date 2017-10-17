@@ -1,24 +1,18 @@
-import Data.Char (intToDigit)
--- should stop at 1,000,000 cause total is 10,000,000,000
-lexicographicPermutations :: [String]
-lexicographicPermutations = 
-    [ val | 
-      a <- l, 
-      b <- l, 
-      c <- l, 
-      d <- l, 
-      e <- l, 
-      f <- l, 
---      g <- l, 
---      h <- l, 
---      i <- l, 
---      j <- l, 
---      let val =  a : b : c : d : e : f : g : h : i : j : [], 
-      let val =  a : b : c : d : e : f : [], 
-          allDifferent val]
-  where l = [ intToDigit x | x <- [0 .. 5]]
 
-allDifferent :: (Eq a) => [a] -> Bool
-allDifferent []     = True
-allDifferent (x:xs) = x `notElem` xs && allDifferent xs
+-- https://www.youtube.com/watch?v=bSFIjJi2syQ&index=31&list=PLo_ebKiwsNTpJmp47_lQJYuKqk6XVjf2a
+
+permutations n digits = 
+    let digitsLength = length digits
+     in if (digitsLength == 1) 
+           then digits 
+           else 
+           let groupSize = fact $ digitsLength-1 
+               groupIndex = n `div` groupSize
+               withinGroup = n `mod` groupSize
+               value = digits !! groupIndex
+            in value : permutations withinGroup (filter (/= value) digits)
+
+fact x = product [1..x]
+
+-- (map intToDigit $ permutations 999999 [0..9]) == "2783915460"
 
