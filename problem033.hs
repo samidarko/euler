@@ -1,15 +1,8 @@
 import qualified Data.Set as S
 import Helpers (stringToIntList)
+import Data.Numbers.Primes (primeFactors)
 
-l = [10..99]
--- l = [ (n, d) | n <- l, d <- l, n < d, n `mod` 10 /= 0 && d `mod` 10 /= 0 ]
-
--- a = S.fromList [4, 9]
--- b = S.fromList [9, 8]
--- Prelude.foldl fn [] [ (n, d) | n <- l, d <- l]
--- S.fromList $ Prelude.foldl fn [] [ (n, d) | n <- l, d <- l]
-
--- fn :: (Show a, Integral a) => [(Integer, Integer)] -> (a, a) -> [(Integer, Integer)]
+fn :: [(Integer, Integer)] -> (Integer, Integer) -> [(Integer, Integer)]
 fn acc (n, d) = let a = S.fromList $ stringToIntList $ show n
                     b = S.fromList $ stringToIntList $ show d
                     i = S.intersection a b
@@ -17,14 +10,19 @@ fn acc (n, d) = let a = S.fromList $ stringToIntList $ show n
                     b' = S.difference b i
                     extract = S.elemAt 0
                     isModTen = n `mod` 10 == 0 && d `mod` 10 == 0
+                    intDiv x y = fromInteger x / fromInteger y
                  in if n > d || isModTen || S.null i || S.size a' /= 1 || S.size b' /= 1
                        then acc
                        else let n' = extract a'
                                 d' = extract b'
-                             in if n' > 0 && d' >0 && n `div` d == n' `div` d' 
-                                   then (n, d, n', d'):acc else acc
+                             in if n' > 0 && d' >0 && intDiv n d == intDiv n' d' 
+                                   then (n', d'):acc else acc
 
--- (extract a', extract b'):acc
 
-main :: IO ()
-main = putStrLn "hello"
+l = [10..99]
+
+nonTrivial = foldl fn [] [ (n, d) | n <- l, d <- l]
+nonTrivialProduct = foldl (\(x1, y1) (x2, y2) -> (x1*x2, y1*y2) ) (1, 1) nonTrivial
+
+-- Found the following on the forum written by AntoineCellerier, an absolute delight
+-- product [a Data.Ratio.% b | a <- [1..9], b <- [1..9], c <-[1..9], 10*a+c < 10*c+b, (10*a+c)*b == (10*c+b)*a ]
